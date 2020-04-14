@@ -9,5 +9,28 @@ function get() {
             }
         })
         .then((e) => e.json())
-        .then((e) => console.log(e));
+        .then(showCelebrities);
 }
+
+function showCelebrities(data) {
+    data.forEach(showCeleb);
+}
+
+function showCeleb(celebrity) {
+    const template = document.querySelector("template").content;
+    const copy = template.cloneNode(true);
+    const parent = document.querySelector("main");
+
+    copy.querySelector("h1").textContent = celebrity.name;
+    copy.querySelector("h2").textContent = celebrity.alias;
+
+    const ul = copy.querySelector("ul");
+    celebrity.exes.forEach((ex) => {
+        const li = document.createElement("li");
+        li.textContent = ex;
+        ul.appendChild(li)
+    })
+    parent.appendChild(copy);
+}
+
+get();
