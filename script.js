@@ -1,14 +1,13 @@
-const endpoint = "https://frontendspring20-34e5.restdb.io/rest/celebrities";
+const endpoint = "https://frontendspring20-34e5.restdb.io/rest/countries";
 const apiKey = "5e957564436377171a0c232c";
 
 window.addEventListener("load", (e) => {
     document.querySelector("button.add-new").addEventListener("click", () => {
         const data = {
-            name: "Mégane",
-            alias: "Megs" + Math.random(),
-            dob: "1998-06-03",
-            albums: 0,
-            exes: ["Orlando Bloom", "Johnny Depp"]
+            country: "My country",
+            area: "5555",
+            language: "German",
+            three_biggest_cities: ["Montevideo", "Brussels", "Malmö"]
         };
         post(data);
     });
@@ -26,38 +25,38 @@ function get() {
             }
         })
         .then((e) => e.json())
-        .then(showCelebrities);
+        .then(showCountries);
 }
 get();
 
-function showCelebrities(data) {
-    data.forEach(showCeleb);
+function showCountries(data) {
+    data.forEach(showCountry);
 }
 
-function showCeleb(celebrity) {
-    console.log(celebrity)
+function showCountry(country) {
+    console.log(country)
 
     const template = document.querySelector("template").content;
     const copy = template.cloneNode(true);
     const parent = document.querySelector("main");
 
-    copy.querySelector("article").dataset.id = celebrity._id;
-    copy.querySelector("h1").textContent = celebrity.name;
-    copy.querySelector("h2").textContent = "Also known as: " + celebrity.alias;
+    copy.querySelector("article").dataset.id = country._id;
+    copy.querySelector("h1").textContent = country.country;
+    copy.querySelector("h2").textContent = country.area;
     const ul = copy.querySelector("ul");
-    celebrity.exes.forEach((ex) => {
+    country.three_biggest_cities.forEach((city) => {
         const li = document.createElement("li");
-        li.textContent = ex;
+        li.textContent = city;
         ul.appendChild(li)
     });
 
-    copy.querySelector("button.delete-me").addEventListener("click", () => deleteIt(celebrity._id));
+    copy.querySelector("button.delete-me").addEventListener("click", () => deleteIt(country._id));
     parent.appendChild(copy);
 }
 
 function post(data) {
     // OPTIMISTIC INSERTS below
-    // showCeleb(data);
+    // showCountry(data);
 
     const postData = JSON.stringify(data);
 
@@ -71,7 +70,7 @@ function post(data) {
             body: postData,
         })
         .then((res) => res.json())
-        .then((data) => showCeleb(data));
+        .then((data) => showCountry(data));
 }
 
 function deleteIt(id) {
@@ -93,11 +92,10 @@ function deleteIt(id) {
 function put(id) {
 
     let data = {
-        name: "Mégane3",
-        alias: "Megs3" + Math.random(),
-        dob: "1998-06-01",
-        albums: 0,
-        exes: ["Me", "You"]
+        country: "France",
+        area: "567378",
+        language: "French",
+        three_biggest_cities: ["same", "other", "another"]
     }
 
     let postData = JSON.stringify(data);
@@ -114,12 +112,12 @@ function put(id) {
         .then((d) => d.json())
         .then((data) => {
             const copy = document.querySelector(`article[data-id="${id}"]`)
-            copy.querySelector("h1").textContent = data.name;
-            copy.querySelector("h2").textContent = "Also known as: " + data.alias;
+            copy.querySelector("h1").textContent = data.country;
+            copy.querySelector("h2").textContent = data.area;
             const ul = copy.querySelector("ul");
-            data.exes.forEach((ex) => {
+            data.three_biggest_cities.forEach((city) => {
                 const li = document.createElement("li");
-                li.textContent = ex;
+                li.textContent = city;
                 ul.appendChild(li)
             });
         });
